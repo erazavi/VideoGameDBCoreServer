@@ -11,63 +11,48 @@ namespace DeliveryCoreServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VideogamesController : ControllerBase
+    public class VideoGamesController : ControllerBase
     {
         private readonly VideoGameDBContext _context;
 
-        public VideogamesController(VideoGameDBContext context)
+        public VideoGamesController(VideoGameDBContext context)
         {
             _context = context;
         }
 
-        // GET: api/Videogames
+        // GET: api/VideoGames
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Videogame>>> GetVideogames()
+        public async Task<ActionResult<IEnumerable<VideoGames>>> GetVideoGames()
         {
-            return await _context.Videogames.ToListAsync();
+            return await _context.VideoGames.ToListAsync();
         }
 
-        // GET: api/Videogames/5
+        // GET: api/VideoGames/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DTOs.VideoGameDTO>> GetVideogame(int id)
+        public async Task<ActionResult<VideoGames>> GetVideoGames(int id)
         {
-            var videogame = await _context.Videogames
-                .Include(v => v.Platform)
-                .Include(v => v.Publisher)
-                .Include(v => v.Developer)
-                .Where(v => v.Id == id)
-                .FirstOrDefaultAsync();
+            var videoGames = await _context.VideoGames.FindAsync(id);
 
-            if (videogame == null)
+            if (videoGames == null)
             {
                 return NotFound();
             }
 
-            var videogameDTO = new DTOs.VideoGameDTO()
-            {
-                Name = videogame.Name,
-                Publisher = videogame.Publisher.Name,
-                Platform = videogame.Platform.Name,
-                Developer = videogame.Developer.Name,
-                ReleaseDate = videogame.ReleaseDate,
-                CountryPublished = videogame.Publisher.Country
-            };
-
-            return videogameDTO;
+            return videoGames;
         }
 
-        // PUT: api/Videogames/5
+        // PUT: api/VideoGames/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutVideogame(int id, Videogame videogame)
+        public async Task<IActionResult> PutVideoGames(int id, VideoGames videoGames)
         {
-            if (id != videogame.Id)
+            if (id != videoGames.VideoGameId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(videogame).State = EntityState.Modified;
+            _context.Entry(videoGames).State = EntityState.Modified;
 
             try
             {
@@ -75,7 +60,7 @@ namespace DeliveryCoreServer.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!VideogameExists(id))
+                if (!VideoGamesExists(id))
                 {
                     return NotFound();
                 }
@@ -88,51 +73,37 @@ namespace DeliveryCoreServer.Controllers
             return NoContent();
         }
 
-        // POST: api/Videogames
+        // POST: api/VideoGames
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Videogame>> PostVideogame(Videogame videogame)
+        public async Task<ActionResult<VideoGames>> PostVideoGames(VideoGames videoGames)
         {
-            _context.Videogames.Add(videogame);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (VideogameExists(videogame.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _context.VideoGames.Add(videoGames);
+            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetVideogame", new { id = videogame.Id }, videogame);
+            return CreatedAtAction("GetVideoGames", new { id = videoGames.VideoGameId }, videoGames);
         }
 
-        // DELETE: api/Videogames/5
+        // DELETE: api/VideoGames/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Videogame>> DeleteVideogame(int id)
+        public async Task<ActionResult<VideoGames>> DeleteVideoGames(int id)
         {
-            var videogame = await _context.Videogames.FindAsync(id);
-            if (videogame == null)
+            var videoGames = await _context.VideoGames.FindAsync(id);
+            if (videoGames == null)
             {
                 return NotFound();
             }
 
-            _context.Videogames.Remove(videogame);
+            _context.VideoGames.Remove(videoGames);
             await _context.SaveChangesAsync();
 
-            return videogame;
+            return videoGames;
         }
 
-        private bool VideogameExists(int id)
+        private bool VideoGamesExists(int id)
         {
-            return _context.Videogames.Any(e => e.Id == id);
+            return _context.VideoGames.Any(e => e.VideoGameId == id);
         }
     }
 }

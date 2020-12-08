@@ -17,10 +17,8 @@ namespace DeliveryCoreServer.Models
         {
         }
 
-        public virtual DbSet<Developer> Developers { get; set; }
-        public virtual DbSet<Platform> Platforms { get; set; }
-        public virtual DbSet<Publisher> Publishers { get; set; }
-        public virtual DbSet<Videogame> Videogames { get; set; }
+        public virtual DbSet<Publishers> Publishers { get; set; }
+        public virtual DbSet<VideoGames> VideoGames { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -33,13 +31,13 @@ namespace DeliveryCoreServer.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Developer>(entity =>
+            modelBuilder.Entity<Publishers>(entity =>
             {
-                entity.ToTable("developer");
+                entity.ToTable("publishers");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.HasKey(e => e.PublisherId)
+                    .HasName("PK_publishers");
+                    
 
                 entity.Property(e => e.Country)
                     .HasMaxLength(50)
@@ -51,85 +49,34 @@ namespace DeliveryCoreServer.Models
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("name");
+                entity.HasMany(e => e.VideoGames)
+                    .WithOne(d => d.Publisher);
+ 
             });
 
-            modelBuilder.Entity<Platform>(entity =>
-            {
-                entity.ToTable("platform");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("name");
-
-                entity.Property(e => e.ReleaseDate)
-                    .HasColumnType("date")
-                    .HasColumnName("release_date");
-            });
-
-            modelBuilder.Entity<Publisher>(entity =>
-            {
-                entity.ToTable("publisher");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
-
-                entity.Property(e => e.Country)
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("country");
-
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("name");
-            });
-
-            modelBuilder.Entity<Videogame>(entity =>
+            modelBuilder.Entity<VideoGames>(entity =>
             {
 
-                entity.ToTable("videogame");
+                entity.ToTable("videogames");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.HasKey(e => e.VideoGameId)
+                    .HasName("PK_videogames");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("name");
-
-                entity.Property(e => e.PlatformId).HasColumnName("platform_id");
 
                 entity.Property(e => e.PublisherId).HasColumnName("publisher_id");
 
-                entity.Property(e => e.DeveloperId).HasColumnName("developer_id");
-
                 entity.Property(e => e.ReleaseDate)
                     .HasColumnType("date")
                     .HasColumnName("release_date");
 
-                entity.HasOne(d => d.Developer)
-                    .WithMany()
-                    .HasForeignKey(d => d.DeveloperId)
-                    .HasConstraintName("FK_videogame_developer");
-
-                entity.HasOne(d => d.Platform)
-                    .WithMany()
-                    .HasForeignKey(d => d.PlatformId)
-                    .HasConstraintName("FK_videogame_platform");
-
                 entity.HasOne(d => d.Publisher)
-                    .WithMany()
+                    .WithMany(e => e.VideoGames)
                     .HasForeignKey(d => d.PublisherId)
-                    .HasConstraintName("FK_videogame_publisher");
+                    .HasConstraintName("FK_videogames_publishers");
             });
 
             OnModelCreatingPartial(modelBuilder);

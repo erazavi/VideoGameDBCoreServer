@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DeliveryCoreServer.DTOs
+namespace DeliveryCoreServer.ViewModels
 {
-    public class VideoGameDTO
+    public class VideoGameWithCountry
     {
-        public int Id { get; set; }
         public string Name { get; set; }
-        public string Platform { get; set; }
         public string Publisher { get; set; }
-        public string Developer { get; set; }
-
         public string CountryPublished { get; set; }
         public DateTime? ReleaseDate { get; set; }
 

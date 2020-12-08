@@ -22,37 +22,37 @@ namespace DeliveryCoreServer.Controllers
 
         // GET: api/Publishers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Publisher>>> GetPublishers()
+        public async Task<ActionResult<IEnumerable<Publishers>>> GetPublishers()
         {
             return await _context.Publishers.ToListAsync();
         }
 
         // GET: api/Publishers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Publisher>> GetPublisher(int id)
+        public async Task<ActionResult<Publishers>> GetPublishers(int id)
         {
-            var publisher = await _context.Publishers.FindAsync(id);
+            var publishers = await _context.Publishers.FindAsync(id);
 
-            if (publisher == null)
+            if (publishers == null)
             {
                 return NotFound();
             }
 
-            return publisher;
+            return publishers;
         }
 
         // PUT: api/Publishers/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPublisher(int id, Publisher publisher)
+        public async Task<IActionResult> PutPublishers(int id, Publishers publishers)
         {
-            if (id != publisher.Id)
+            if (id != publishers.PublisherId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(publisher).State = EntityState.Modified;
+            _context.Entry(publishers).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +60,7 @@ namespace DeliveryCoreServer.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PublisherExists(id))
+                if (!PublishersExists(id))
                 {
                     return NotFound();
                 }
@@ -77,47 +77,33 @@ namespace DeliveryCoreServer.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Publisher>> PostPublisher(Publisher publisher)
+        public async Task<ActionResult<Publishers>> PostPublishers(Publishers publishers)
         {
-            _context.Publishers.Add(publisher);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (PublisherExists(publisher.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _context.Publishers.Add(publishers);
+            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPublisher", new { id = publisher.Id }, publisher);
+            return CreatedAtAction("GetPublishers", new { id = publishers.PublisherId }, publishers);
         }
 
         // DELETE: api/Publishers/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Publisher>> DeletePublisher(int id)
+        public async Task<ActionResult<Publishers>> DeletePublishers(int id)
         {
-            var publisher = await _context.Publishers.FindAsync(id);
-            if (publisher == null)
+            var publishers = await _context.Publishers.FindAsync(id);
+            if (publishers == null)
             {
                 return NotFound();
             }
 
-            _context.Publishers.Remove(publisher);
+            _context.Publishers.Remove(publishers);
             await _context.SaveChangesAsync();
 
-            return publisher;
+            return publishers;
         }
 
-        private bool PublisherExists(int id)
+        private bool PublishersExists(int id)
         {
-            return _context.Publishers.Any(e => e.Id == id);
+            return _context.Publishers.Any(e => e.PublisherId == id);
         }
     }
 }
