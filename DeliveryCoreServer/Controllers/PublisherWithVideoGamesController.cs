@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace DeliveryCoreServer.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PublisherWithVideoGamesController : ControllerBase
