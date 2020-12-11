@@ -4,14 +4,16 @@ using DeliveryCoreServer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DeliveryCoreServer.Migrations
 {
     [DbContext(typeof(VideoGameDBContext))]
-    partial class VideoGameDBContextModelSnapshot : ModelSnapshot
+    [Migration("20201211043537_publisherIdRequired")]
+    partial class publisherIdRequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,7 +61,6 @@ namespace DeliveryCoreServer.Migrations
                         .HasColumnName("name");
 
                     b.Property<int?>("PublisherId")
-                        .IsRequired()
                         .HasColumnType("int")
                         .HasColumnName("publisher_id");
 
@@ -80,9 +81,7 @@ namespace DeliveryCoreServer.Migrations
                     b.HasOne("DeliveryCoreServer.Models.Publishers", "Publisher")
                         .WithMany("VideoGames")
                         .HasForeignKey("PublisherId")
-                        .HasConstraintName("FK_videogames_publishers")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasConstraintName("FK_videogames_publishers");
 
                     b.Navigation("Publisher");
                 });

@@ -9,8 +9,7 @@ namespace DeliveryCoreServer.ViewModels
     public class PublisherWithVideoGames
     {
         public string Name { get; set; }
-        public string Country { get; set; }
 
-        public List<VideoGames> VideoGames { get; set; }
+        public List<string> VideoGames { get; set; }
     }
 }

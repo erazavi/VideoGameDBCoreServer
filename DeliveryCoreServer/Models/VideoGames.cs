@@ -12,7 +12,7 @@ namespace DeliveryCoreServer.Models
         [Key]
         public int VideoGameId { get; set; }
         public string Name { get; set; }
-        public int? PublisherId { get; set; }
+        public int PublisherId { get; set; }
         public DateTime? ReleaseDate { get; set; }
 
         public virtual Publishers Publisher { get; set; }

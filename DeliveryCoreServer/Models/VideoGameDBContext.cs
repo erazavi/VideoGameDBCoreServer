@@ -67,7 +67,9 @@ namespace DeliveryCoreServer.Models
                     .HasMaxLength(50)
                     .HasColumnName("name");
 
-                entity.Property(e => e.PublisherId).HasColumnName("publisher_id");
+                entity.Property(e => e.PublisherId)
+                      .IsRequired()
+                      .HasColumnName("publisher_id");
 
                 entity.Property(e => e.ReleaseDate)
                     .HasColumnType("date")

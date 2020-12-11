@@ -4,14 +4,16 @@ using DeliveryCoreServer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DeliveryCoreServer.Migrations
 {
     [DbContext(typeof(VideoGameDBContext))]
-    partial class VideoGameDBContextModelSnapshot : ModelSnapshot
+    [Migration("20201211061655_publisherIdRequired3")]
+    partial class publisherIdRequired3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
