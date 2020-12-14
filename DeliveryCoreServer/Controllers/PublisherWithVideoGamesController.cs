@@ -26,15 +26,11 @@ namespace DeliveryCoreServer.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PublisherWithVideoGames>>> GetPublishersWithVideoGames()
         {
-            List<PublisherWithVideoGames> publishersWithGames = new List<PublisherWithVideoGames>();
-            List<Publishers> publishers = await _context.Publishers.Include("VideoGames").ToListAsync();
-
-            publishers.ForEach(p => publishersWithGames.Add(new PublisherWithVideoGames
+            var publishersWithGames = await _context.Publishers.Select(p => new PublisherWithVideoGames
             {
                 Name = p.Name,
                 VideoGames = p.VideoGames.Select(v => v.Name).ToList()
-            })) ;
-
+            }).ToListAsync();
             return publishersWithGames;
         }
     }
